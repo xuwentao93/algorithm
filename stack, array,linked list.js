@@ -237,18 +237,142 @@ var threeSum = function(nums) {
   nums.sort((x, y) => x - y) // 不得不排序去避免未知的重复push.
   for (let i = 0; i < nums.length - 2; i++) {
     const map = new Map()
-    for (let j = i + 1; j < nums.length; j++) {
-      if (!map.has(nums[j])) {
-        map.set(nums[j], j)
+    for (let j = 0; j < nums.length; j++) {
+      const has = map.get(-nums[i] - nums[j])
+      if (has !== undefined) {
+        array.push([nums[i], -nums[i] - nums[j], nums[j]])
       }
-      if (map.get(-nums[i] - nums[j]) !== undefined && map.get(-nums[i] - nums[j]) !== j) {
-        array.push([nums[i], 0 - nums[i] - nums[j], nums[j]])
-      } 
-      while (nums[j] === nums[j + 1]) j++
+      map.set(nums[j], j)
+      while (nums[j] === nums[j++]) j++
     }
     while (nums[i] === nums[i + 1]) i++
   }
   return array
 }
 
-threeSum([-1,0,1,0])
+// 2019-12-2 end
+
+// 2019-12-3 start
+
+// 将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的.(l-21)
+// 示例：
+// 输入：1->2->4, 1->3->4
+// 输出：1->1->2->3->4->4
+// 此题需要额外说明, 输入的是两个对象, val表示当前值, next属性是下一个对象.
+// example: {
+//   val: 1,
+//   next: { val: 2, 
+//           next: { val: 4, 
+//                  next: null 
+//           } 
+//   }
+// }
+
+// 1. 直接比较两个对象的next属性对应对象的val值的大小, 把拼接对象的 next 指向小的那一个.
+// 这样两个链表都要遍历一次, 所以时间复杂度为O(n1 + n2), 空间复杂度为O(1), 创造了一个next指针, 而且最后释放了.
+var mergeTwoLists = function(l1, l2) {
+  const merge = { next: {} }
+  let next = merge
+  if (l1 === null) return l2
+  if (l2 === null) return l1
+  while (l1 !== null || l2 !== null) {
+    if (l2 === null || l1 === null) {
+      const obj = l1 === null ? l2 : l1
+      next.val = obj.val
+      next.next = obj.next
+      return merge
+    } else if (l1.val <= l2.val) {
+      next.val = l1.val
+      l1 = l1.next
+      next.next = { next: {} }
+      next = next.next
+    } else {
+        next.val = l2.val
+        l2 = l2.next
+        next.next = { next: {} }
+        next = next.next
+    }
+  }
+  return merge
+}
+
+// 递归. 直接调用自己即可. 时间复杂度显然为O(m + n), 空间复杂度因为递归原因遗留, 也是O(m + n)
+var mergeTwoLists = function(l1, l2) {
+  if (l1 === null) return l2
+  if (l2 === null) return l1
+  if (l1.val < l2.val) {
+    l1.next = mergeTwoLists(l1.next, l2)
+    return l1
+  } else {
+    l2.next = mergeTwoLists(l2.next, l1)
+    return l2
+  }
+}
+
+// 给定两个有序整数数组 nums1 和 nums2，将 nums2 合并到 nums1 中，使得 num1 成为一个有序数组。
+// 说明: 初始化 nums1 和 nums2 的元素数量分别为 m 和 n。
+// 你可以假设 nums1 有足够的空间（空间大小大于或等于 m + n）来保存 nums2 中的元素。(l-88)
+// 示例:
+// 输入:
+// nums1 = [1,2,3,0,0,0], m = 3
+// nums2 = [2,5,6],       n = 3
+// 输出: [1,2,2,3,5,6]
+
+// 1.暴力法. 每次插入进行比较nums[i] nums[i + 1] nums[j] 三者的大小, nums[j] 小的话就插入,
+// 从nums[2]中移除, 所以时间复杂度为O(m + n)(最好的情况下为O(Math.min(m, n))), 
+// 而每次插入nums[1] 都要移动n个位置, 所以最终时间复杂度为O(n(m + n)), 不需要开辟新的空间, 所以空间复杂度为O(1).
+
+// 2. 复制排序. 将nums[1]直接复制在nums[2]后面, 排序后替换掉原数组前面 m + n 个位置. 那么最后的空间复杂度
+// 即为排序的空间复杂度: O((m + n)log(m + n))).(排序的时间复杂度) 因为复制了数组1, 所以空间复杂度为: O(n)
+var merge = function(nums1, m, nums2, n) {
+  for (let i = 0; i < m; i++) {
+      nums2.push(nums1[i])
+  }
+  nums2.sort((x, y) => x - y)
+  for (let i = 0; i < m + n; i++) {
+      nums1[i] = nums2[i]
+  }
+}
+
+// 3. 双指针法. 之前思考过顺序替换, 由于换来换去最后构成逻辑过于复杂, 那么就直接倒序更改, 
+// 这样改动后的数字, 一定在自己原来的位置上. 时间复杂度: O(m + n), 空间复杂度: O(1).
+
+var merge = function(nums1, m, nums2, n) {
+  let i = m - 1
+  let j = n - 1
+  let k = m + n - 1
+  while(i >=0 && j>=0)
+  {
+    if(nums1[i] > nums2[j])
+    nums1[k--] = nums1[i--]
+    else
+    nums1[k--] = nums2[j--]
+  }
+  while(j >= 0)
+  nums1[k--] = nums2[j--]
+}
+
+// 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+// 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。(l-24)
+// 示例:
+// 给定 1->2->3->4, 你应该返回 2->1->4->3.
+
+// 1.
+
+var swapPairs = function(head) {
+  // let move = head
+  let pointHead = { next: head }
+  let n = 1
+  // let t = {}
+  let move = head
+  let t = move
+  // while (move.next !== null) {
+    let 
+
+    k = t.next
+    console.log(t)
+    n++
+  return pointHead.next
+}
+
+console.log(swapPairs({ val: 1, next: { val: 2, next: { val: 3, next: null }}}))
