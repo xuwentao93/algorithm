@@ -357,22 +357,130 @@ var merge = function(nums1, m, nums2, n) {
 // 示例:
 // 给定 1->2->3->4, 你应该返回 2->1->4->3.
 
-// 1.
+// 1. 迭代. 如下别人代码, 不要修改原来的变量指向, 用.next去实现. 时间复杂度为: O(n), 空间复杂度为: O(n).
+// 用了很多变量指向, 最大空间消耗为4n.
 
 var swapPairs = function(head) {
-  // let move = head
-  let pointHead = { next: head }
-  let n = 1
-  // let t = {}
-  let move = head
-  let t = move
-  // while (move.next !== null) {
-    let 
+  let target = {next: head}
+  let pre = target
+  pre.next = head
+  let cur, next, temp
+  while (pre.next && pre.next.next){
+      cur = pre.next
+      next = cur.next
+      temp = next.next
+      cur.next = temp
+      next.next = cur
+      pre.next = next
+      pre = cur
+  }
+  return target.next
+};
+// end 19-12-03
 
-    k = t.next
-    console.log(t)
-    n++
-  return pointHead.next
+// start 19-12-04
+
+// 2. 递归, 参考网上的题解. 时间复杂度为: O(n), 因为在执行过程中有一大堆 tmp 无法释放, 
+// 所以空间复杂度为: O(n²).
+
+var swapPairs = function(head) {
+  if(head == null || head.next == null) {
+    return head
+  }
+  let tmp = head.next
+  head.next = swapPairs(tmp.next)
+  tmp.next = head
+  return tmp
 }
 
-console.log(swapPairs({ val: 1, next: { val: 2, next: { val: 3, next: null }}}))
+// l-21
+
+var mergeTwoLists = function(l1, l2) {
+  if (l1 === null) return l2
+  if (l2 === null) return l1
+  if (l1.val > l2.val) {
+    l2.next = mergeTwoLists(l1, l2.next)
+    return l2
+  } else {
+    l1.next = mergeTwoLists(l1.next, l2)
+    return l1
+  }
+}
+
+// l-88
+
+var merge = function(nums1, m, nums2, n) {
+  while (m > 0 && n > 0) {
+    if (nums1[m - 1] > nums2[n - 1]) {
+      nums1[m + n - 1] = nums1[m-- -1]
+    } else {
+      nums1[m + n - 1] = nums2[n-- -1]
+    }
+  }
+  if (m === 0) {
+    while (n > 0) {
+      nums[n - 1] = nums[n-- -1] 
+    }
+  }
+}
+
+// 给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
+// 如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+// 您可以假设除了数字 0 之外，这两个数都不会以 0 开头。(l-2)
+// 示例：
+// 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+// 输出：7 -> 0 -> 8
+// 原因：342 + 465 = 807。
+
+
+// 1. 暴力法. 遍历两个链表, 将两个链表相加得到的数字存入一个数组, 在循环数组, 如果大于等于10则减10, 
+// 左边那个数字加1, 最后新建一个链表循环获取数组的各项. 所以最后要循环3次, 每次的时间复杂度规模相同,
+// 所以最终的时间复杂度为: O(n), 因为加了个数组存值, 所以空间复杂度为: O(n).
+var addTwoNumbers = function(l1, l2) {
+  const sumList = []
+  let cur = 0
+  let sum
+  const merge = {}
+  let cursor = merge
+  while (l1 !== null && l2 !== null) {
+    sum = l1.val + l2.val
+    l1 = l1.next
+    l2 = l2.next
+    sumList[cur++] = sum
+  }
+  if (l1 !== null || l2 !== null) {
+    let s = l1 === null ? l2 : l1
+    while (s !== null) {
+      sum = s.val
+      s = s.next
+      sumList[cur++] = sum
+    }
+  }
+  for (let i = 0; i < sumList.length - 1; i++) {
+    if (sumList[i] >= 10) {
+      sumList[i] -= 10
+      sumList[i + 1] += 1
+    }
+  }
+  if (sumList[sumList.length - 1] >= 10) {
+    sumList.push(1)
+    sumList[sumList.length - 2] -= 10
+  }
+  for (let i = 0; i < sumList.length; i++) {
+    cursor.val = sumList[i]
+    if (i === sumList.length - 1) {
+      cursor.next = null
+      return merge
+    } else {
+      cursor.next = {}
+      cursor = cursor.next
+    }
+  }
+  return merge
+};
+
+// 2. 在上述中开辟了数组去储存空间, 实际上可以只开辟一个整型数组去储存, 这样空间复杂度为: O(1).
+// 给明天的任务: 上述过程空间复杂度虽然是O(n), 但是感觉有重复过程冗余, 尝试降低1轮循环或者在
+// 循环中的判断条件, 同时空间复杂度必须为O(1).
+
+//
