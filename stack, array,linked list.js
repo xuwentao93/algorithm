@@ -366,13 +366,13 @@ var swapPairs = function(head) {
   pre.next = head
   let cur, next, temp
   while (pre.next && pre.next.next){
-      cur = pre.next
-      next = cur.next
-      temp = next.next
-      cur.next = temp
-      next.next = cur
-      pre.next = next
-      pre = cur
+    cur = pre.next
+    next = cur.next
+    temp = next.next
+    cur.next = temp
+    next.next = cur
+    pre.next = next
+    pre = cur
   }
   return target.next
 };
@@ -483,4 +483,72 @@ var addTwoNumbers = function(l1, l2) {
 // 给明天的任务: 上述过程空间复杂度虽然是O(n), 但是感觉有重复过程冗余, 尝试降低1轮循环或者在
 // 循环中的判断条件, 同时空间复杂度必须为O(1).
 
-//
+// 反转从位置 m 到 n 的链表。请使用一趟扫描完成反转。(l-92)
+
+// 说明:
+// 1 ≤ m ≤ n ≤ 链表长度。
+// 示例:
+// 输入: 1->2->3->4->5->NULL, m = 2, n = 4
+// 输出: 1->4->3->2->5->NULL
+
+// 1. 暴力迭代. 第一次循环的时候, 找到m, n以及m的父节点(m = 1 的时候为外部定义的一个节点),
+// 将所有对象都存到一个数组内部, 第二次循环用迭代的方式一一获取. 所以时间复杂度为: O(n),
+// 空间复杂度为: O(n).
+
+var reverseBetween = function(head, m, n) {
+  if (m === n) {
+    return head
+  }
+  const arr = []
+  let node = { next: head }
+  let cur = node
+  for (let i = 0; i < m - 1; i++) { // 定位m.
+    cur = cur.next
+  }
+  let cut = cur
+  // 循环完之后, cur.next 即为m, 记录下cur.
+  for (let i = 0; i < n - m + 2; i++) {
+    arr[i] = cur.next
+    cur = cur.next
+  }
+  // 复制完毕, 接下来准备赋值.
+  cut.next = arr[3]
+  for (let i = 0; i < n - m + 1; i++) {
+    cut.next = arr[n - m - i]
+    cut = cut.next
+  }
+  cut.next = arr[arr.length - 1] // 尾指针指向末尾.
+  if (m === 1) return arr[arr.length - 2] // m 为头节点的情况, 需要注意.
+  return head
+};
+
+// end 19-12-04
+
+// start 19-12-05
+
+// 给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+// k 是一个正整数，它的值小于或等于链表的长度。
+// 如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。(l-25)
+// 示例 :
+// 给定这个链表：1->2->3->4->5
+// 当 k = 2 时，应当返回: 2->1->4->3->5
+// 当 k = 3 时，应当返回: 3->2->1->4->5
+// 说明 :
+// 你的算法只能使用常数的额外空间。
+// 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+// 1. 迭代. 这题本质上就是基于上题(l-92)的空间复杂度优化. 之前思路的卡点在于, 如果不储存空间, 
+// 指针指向最后个对象的时候, 他的上一级对象找不到了, 所以现在更换一种思路, 把这个对象的next指针
+// 的对象保留在一个变量中, 同时让他的指针回指他的上一级对象, 在用变量继续进行下一级的相同操作.
+// 最后, 12345 会变成 4指向3, 3指向2, 2指向1, 1指向2. 所以我们还需要把m的上一级节点的指针指向
+// 4(即n), 把2(即(m)这个next对象的指针指向5(原先n的下一个节点). 这样, 在时间复杂度不变的情况下,
+// 空间复杂度降低到了O(1). 而这题无非就是拆分反转, 时间复杂度仍然为O(n).
+
+var reverseKGroup = function(head, k) {
+  
+};
+
+
+
+
+// end 19-12-05
