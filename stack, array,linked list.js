@@ -1,3 +1,6 @@
+const linkTest = 
+  { val: 1, next: { val: 2, next: { val: 3, next: { val: 4, next: { val: 5, next: null } } } } }
+
 // 给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。
 // 在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。
 // 找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。 (leetcode 11)
@@ -259,14 +262,6 @@ var threeSum = function(nums) {
 // 输入：1->2->4, 1->3->4
 // 输出：1->1->2->3->4->4
 // 此题需要额外说明, 输入的是两个对象, val表示当前值, next属性是下一个对象.
-// example: {
-//   val: 1,
-//   next: { val: 2, 
-//           next: { val: 4, 
-//                  next: null 
-//           } 
-//   }
-// }
 
 // 1. 直接比较两个对象的next属性对应对象的val值的大小, 把拼接对象的 next 指向小的那一个.
 // 这样两个链表都要遍历一次, 所以时间复杂度为O(n1 + n2), 空间复杂度为O(1), 创造了一个next指针, 而且最后释放了.
@@ -324,6 +319,7 @@ var mergeTwoLists = function(l1, l2) {
 
 // 2. 复制排序. 将nums[1]直接复制在nums[2]后面, 排序后替换掉原数组前面 m + n 个位置. 那么最后的空间复杂度
 // 即为排序的空间复杂度: O((m + n)log(m + n))).(排序的时间复杂度) 因为复制了数组1, 所以空间复杂度为: O(n)
+
 var merge = function(nums1, m, nums2, n) {
   for (let i = 0; i < m; i++) {
       nums2.push(nums1[i])
@@ -545,10 +541,42 @@ var reverseBetween = function(head, m, n) {
 // 空间复杂度降低到了O(1). 而这题无非就是拆分反转, 时间复杂度仍然为O(n).
 
 var reverseKGroup = function(head, k) {
-  
+  if (head === null) return head
+  if (head.next === null) return head // leetcode 题目描述错误, 按道理head 的长度应该大于等于1.
+  if (k === 1) return head
+  let point = head
+  let sum = 1
+  while (point.next) {
+    point = point.next
+    sum++
+  }
+  let n = Math.floor(sum / k) // 操作的次数.
+  const dummy = { next: head }
+  let cur = dummy
+  let prev = cur.next // 第一个节点
+  let next = prev.next // 第二个节点
+  let last = next.next // 第三个节点
+  while (n-- > 0) {
+    for (let j = 0; j < k - 1; j++) {
+      next.next = prev
+      prev = next
+      next = last
+      last = last ? last.next : null
+    }
+    let getPoint = cur.next
+    cur.next = prev // 把原先的头节点的上一级的节点指向现在的头节点.
+    getPoint.next = next // 把原先的头节点, 现在的尾节点指向原先尾节点的next.
+    if (n === Math.floor(sum / k)) dummy.next = cur
+    cur = getPoint // 进行下一轮循环的头节点的上一级节点.
+    if (n === 0) return dummy.next // 防止null.next 报错.
+    prev = next
+    next = last
+    last = last ? last.next : null
+  }
+  return dummy.next
 };
 
-
+console.log(reverseKGroup(linkTest, 2))
 
 
 // end 19-12-05
