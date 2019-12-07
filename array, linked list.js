@@ -420,9 +420,9 @@ var merge = function(nums1, m, nums2, n) {
   }
 }
 
-// 给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
-// 如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
-// 您可以假设除了数字 0 之外，这两个数都不会以 0 开头。(l-2)
+// 给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的
+// 每个节点只能存储一位数字。如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+// 您可以假设这两个数都不会以 0 开头。(l-2)
 // 示例：
 // 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
 // 输出：7 -> 0 -> 8
@@ -546,7 +546,7 @@ var reverseKGroup = function(head, k) {
   if (k === 1) return head
   let point = head
   let sum = 1
-  while (point.next) {
+  while (point.next) { // 获取head内部有多少个对象.
     point = point.next
     sum++
   }
@@ -557,7 +557,8 @@ var reverseKGroup = function(head, k) {
   let next = prev.next // 第二个节点
   let last = next.next // 第三个节点
   while (n-- > 0) {
-    for (let j = 0; j < k - 1; j++) {
+    for (let j = 0; j < k - 1; j++) { // 每一次, 把perv, next, last 向下级推移, 同时将下级对象的next
+      // 指向上级. 需要注意边界问题.
       next.next = prev
       prev = next
       next = last
@@ -576,7 +577,132 @@ var reverseKGroup = function(head, k) {
   return dummy.next
 };
 
-console.log(reverseKGroup(linkTest, 2))
+// console.log(reverseKGroup(linkTest, 2))
 
 
 // end 19-12-05
+
+// start 19-12-07
+
+// l-25
+var reverseKGroup = function(head, k) {
+  if (k === 1) return head
+  if (head === null) return head
+  if (head.next === null) return head
+  let point = head
+  let sum = 1
+  while (point.next) {
+    point = point.next
+    sum++
+  }
+  let n = Math.floor(sum / k)
+  const dummy = { next: head }
+  let cursor = dummy
+  let prev = cursor.next
+  let mid = prev.next
+  let last = mid.next
+  while (n-- > 0) {
+    for (let i = 0; i < k - 1; i++) {
+      mid.next = prev
+      prev = mid
+      mid = last
+      last = last ? last.next : null
+    }
+    let getPoint = cursor.next
+    cursor.next = prev
+    getPoint.next = mid
+    cursor = getPoint
+    if (n === 0) return dummy.next
+    prev = mid
+    mid = last
+    last = last ? last.next : null
+  }
+  return dummy.next
+}
+
+// 合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。(l-23)
+// 示例:
+// 输入:
+// [
+//   1->4->5,
+//   1->3->4,
+//   2->6
+// ]
+// 输出: 1->1->2->3->4->4->5->6
+
+// 1.逐一比较. 把每个数组的首项, 存在一个数组中, 遍历数组最小值, 用其.next替代, 当为null的时候则移出
+// 数组. 这样要遍历所有链表, 我们假设有m个链表, 链表的总结点为n, 每次又要遍历数组, 
+// 所以时间复杂度为: O(mn), 开辟了一个储存首项的数组, 所以空间复杂度为: O(m).
+var mergeKLists = function(lists) {
+  const arr = []
+  const midwire = []
+  lists.forEach(item => {
+    if (item !== null) {
+      midwire.push(item)
+    }
+  })
+  lists = midwire
+  lists.forEach((item, index) => { // 初始化arr.
+    if (item === null) {
+      arr.push(item.val)
+    } else {
+      lists.splice(index, 1)
+    }
+  })
+  if (arr.length === 0) { // arr没有值, 说明lists是空数组, 或者内部还有的对象next属性的值全为null.
+    return null
+  }
+  const sum = { next: null }
+  let cursor = sum
+  let t = findMin(arr)
+  while (t) { // 开始循环
+    cursor.next = { val: t[0], next: null }
+    cursor = cursor.next
+    if (lists[t[1]].next) {
+      arr[t[1]] = lists[t[1]].next.val
+      lists[t[1]] = lists[t[1]].next
+    } else {
+      arr.splice(t[1], 1)
+      lists.splice(t[1], 1)
+    }
+    t = findMin(arr)
+  }
+
+  function findMin(arr) { // 找到数组中最小的值, 如果数组中没有值就返回false, 否则返回数组最小值的值和下标.
+    if (arr.length === 0) return false
+    let min = [arr[0], 0]
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] < min[0]) {
+        min = [arr[i], i]
+      }
+    }
+    return min
+  }
+  return sum.next
+};
+
+// 2. 暴力法. 遍历所有lists节点, 全部都存在一个数组里面, sort 这个数组, 逐一添加到
+// 最终要合并的对象上, 遍历需要O(n)的时间, 排序需要O(nlogn)的时间, 新生成的数组,
+// 为所有的节点的值的总数. 所以时间复杂度为: O(nlogn), 空间复杂度为: O(n).
+
+// 3. 两两合并. 我们之前做过合并两个链表的问题, 将多个链表转化成k - 1个次两个链表的问题,
+// 最后他的时间复杂度会接近O(kn), 因为直接在第一个链表上操作, 所以空间复杂度为: O(1).
+
+// 4. 分治法. 针对方法3进行优化, 如果都合并到一个链表当中, 那么肯定有很多次优化会重复, 我们没必要浪费
+// 那么多重复, 每次要做的只是合并当中的两个链表, 把1和2合并, 3和4合并, 第一次执行得到 2/k 个链表,
+// 第二次执行得到 4/k 个链表, 如此重复, 上述问题的时间复杂度就从O(kn)降低到了O(nlog(k)).
+
+// var mergeKLists = function(lists) {
+//   if (lists === null) return null
+//   else if (lists.length === 0) return null
+//   else if (lists.length === 1) return lists[0]
+//   for (let i = 1; i < lists.length; true) { // 通过修改lists.length, 当长度到1的时候循环停止.
+//     for (let j = 0; j < Math.floor(lists.length / 2); j++) {
+//       lists[j] = mergeTwoLists(lists[j * 2], lists[j * 2 + 1])
+//     }
+//     lists.length = Math.floor((lists.length + 1) / 2)
+//   }
+//   return lists[0]
+// }
+
+// end-19-12-07
