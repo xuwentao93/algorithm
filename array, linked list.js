@@ -706,3 +706,60 @@ var mergeKLists = function(lists) {
 // }
 
 // end-19-12-07
+
+//start-19-12-08
+
+// l-11
+var maxArea = function(height) {
+  let left = 0
+  let right = height.length - 1
+  let max = 0
+  let minHeight
+  while (right > left) {
+    minHeight = height[right] > height[left] ? height[left++] : height[right--]
+    max = Math.max((right - left + 1) * minHeight, max)
+  }
+  return max
+}
+
+// l-15
+var threeSum = function(nums) {
+  const arr = []
+  if (nums.length < 3) return arr
+  nums.sort((x, y) => x - y)
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] > 0) return arr
+    let left = i + 1
+    let right = nums.length - 1
+    while (x < y) {
+      if (nums[i] + nums[left] + nums[right] > 0) {
+        while (nums[right] === nums[right - 1]) right--
+        right--
+      } else if (nums[i] + nums[left] + nums[right] < 0) {
+        while (nums[left] === nums[left + 1]) left++
+        left++
+      } else {
+        arr.push([nums[i], nums[left], nums[right]])
+        while (nums[right] === nums[right - 1]) right--
+        while (nums[left] === nums[left + 1]) left++
+        right--
+        left++
+      }
+    }
+    while (nums[i] === nums[i + 1]) i++
+  }
+  return arr
+}
+
+// l-26
+
+var removeDuplicates = function(nums) {
+  let cursor = 1
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i] != nums[i - 1]) {
+      nums[cursor++] = nums[i]
+    }
+  }
+}
+
+//  end 19-12-08

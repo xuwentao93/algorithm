@@ -74,7 +74,8 @@ var calculate = function(s) {
 };
 
 // 给定一个整数序列：a1, a2, ..., an，一个132模式的子序列 ai, aj, ak 被定义为：
-// 当 i < j < k 时，ai < ak < aj。设计一个算法，当给定有 n 个数字的序列时，验证这个序列中是否含有132模式的子序列。(l-456)
+// 当 i < j < k 时，ai < ak < aj。设计一个算法，当给定有 n 个数字的序列时，
+// 验证这个序列中是否含有132模式的子序列。(l-456)
 
 // 示例1:
 // 输入: [1, 2, 3, 4]
@@ -118,13 +119,10 @@ var find132pattern = function(nums) {
 
 // 3. 二分法. 在方法2的基础上, 我们可以拷贝一份原数组的复印, 然后排序新的数组. 在寻找left的时候,
 // 我们的方式仍然不变, 用一个最小值去寻找, 在寻找right的时候, 我们可以给定要求, 用二分法去寻找, 
-// 从而把复杂度从O(n) 降低到了O(logn), 而排序所需要的时间也是O(nlogn), 循环总的时间复杂度也是
-// O(nlogn), 所以最终的时间复杂度为: O(nlogn), 我们开辟了一个新的数组去记录, 所以空间复杂度为: O(n).
+// 从而把复杂度从O(n) 降低到了O(logn), 所以最终的时间复杂度为: O(nlogn), 空间复杂度为O(1).
 
 var find132pattern = function(nums) {
   let min = nums[0]
-  let k = JSON.parse(JSON.stringify(nums)) // 不能直接复制数组, sort 会改变原数组.
-  k.sort((x, y) => x - y)
   for (let i = 1; i < nums.length - 1; i++) {
     let left = i + 1
     let right = nums.length - 1
@@ -160,7 +158,7 @@ var find132pattern = function(nums) {
   for (let i = 1; i < nums.length; i++) {
     min[i] = Math.min(min[i - 1], nums[i])
   }
-  for (let i = nums.length - 1; i > 1; i--) {
+  for (let i = nums.length - 1; i > 0; i--) {
     if (nums[i] > min[i]) {
       while (stack.length !== 0 && stack[stack.length - 1] <= min[i]) {
         stack.pop()
@@ -175,3 +173,24 @@ var find132pattern = function(nums) {
 }
 
 console.log(find132pattern([2,4,1,3]))
+
+// start 19-12-08
+
+// l-456
+
+var find132pattern = function(nums) {
+  if (nums.length < 3) return false
+  const stack = []
+  const min = [nums[0]]
+  for (let i = 1; i < nums.length; i++) {
+    min[i] = Math.min(min[i - 1], nums[i])
+  }
+  for (let i = nums.length - 1; i > 0; i--) {
+    if (nums[i] > min[i]) {
+      while (stack.length !== 0 && stack[stack.length - 1] <= min[i]) stack.pop()
+      if (stack.length !== 0 && stack[stack.length - 1] < nums[i]) return true
+      stack.push(nums[i])
+    }
+  }
+  return false
+}
