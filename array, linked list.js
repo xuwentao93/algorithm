@@ -103,7 +103,7 @@ var threeSum = function(nums) {
 }
 
 // 4. 目前针对方法2进行优化, 交给明天了, 实在花太多时间了.
-// 2019-12-2 对昨天留下的不足, 用 hashmap 进行解决. 每一轮内部循环结束, 我们清空一轮map, 所以
+// 2019-12-02 对昨天留下的不足, 用 hashmap 进行解决. 每一轮内部循环结束, 我们清空一轮map, 所以
 // 很显然, 时间复杂度为O(n²), 空间复杂度为O(n).
 
 var threeSum = function(nums) {
@@ -194,7 +194,7 @@ var rotate = function(nums, k) {
 
 // 2019-12-1 end
 
-// 2019-12-2 start yesterday do problems second time. l-11.
+// 2019-12-02. l-11.
 var maxArea = function(height) {
   let max = 0
   let left = 0
@@ -253,9 +253,9 @@ var threeSum = function(nums) {
   return array
 }
 
-// 2019-12-2 end
+// 2019-12-02 end
 
-// 2019-12-3 start
+// 2019-12-03 start
 
 // 将两个有序链表合并为一个新的有序链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的.(l-21)
 // 示例：
@@ -762,4 +762,4 @@ var removeDuplicates = function(nums) {
   }
 }
 
-//  end 19-12-08
+// end 19-12-08
