@@ -176,7 +176,7 @@ var rotate = function(nums, k) {
 
 var rotate = function(nums, k) {
   let mid
-  if (nums.length == 1) return nums
+  if (nums.length === 1) return nums
   k = k % nums.length // 避免k > nums.length 的问题.
   reverse(nums, 0, nums.length - 1)
   reverse(nums, 0, k - 1)
