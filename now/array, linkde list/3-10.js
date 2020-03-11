@@ -202,3 +202,69 @@ var merge = function(nums1, m, nums2, n) {
 }
 
 // leetcode most votes 上的题解参照其代码重写.
+
+// 3-11 second time.
+// 26.
+
+var removeDuplicates = function(nums) {
+  let pointer = 1;
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i] !== nums[i - 1]) nums[pointer++] = nums[i];
+  }
+  return pointer;
+}
+
+var rotate = function(nums, k) {
+  if (k >= nums.length) k %= nums.length;
+  if (k === 0 || nums.length <= 1) return;
+  reverse(nums, 0, nums.length - 1);
+  reverse(nums, 0, k - 1);
+  reverse(nums, k, nums.length - 1);
+  function reverse(nums, start, end) {
+    while (end > start) {
+      [nums[start], nums[end]] = [nums[end], nums[start]];
+      start++;
+      end--;
+    }
+  }
+}
+
+// 21.
+
+var mergeTwoLists = function(l1, l2) {
+  if (l1 === null) return l2;
+  if (l2 === null) return l1;
+  const merge = {};
+  let pointer = merge;
+  while (l1 !== null && l2 !== null) {
+    if (l1.val < l2.val) {
+      pointer.val = l1.val;
+      l1 = l1.next;
+    } else {
+      pointer.val = l2.val;
+      l2 = l2.next;
+    }
+    pointer.next = {};
+    pointer = pointer.next;
+  }
+  if (l1 === null) {
+      pointer.val = l2.val;
+      pointer.next = l2.next;
+  } else {
+      pointer.val = l1.val;
+      pointer.next = l1.next;
+  }
+  return merge;
+}
+
+// 88
+
+var merge = function(nums1, m, nums2, n) {
+  let p1 = m - 1;
+  let p2 = n - 1;
+  for (let i = m + n - 1; i >= 0; i--) {
+    if (p2 === -1) return;
+    if (nums2[p2] > nums1[p1] || p1 === -1) nums1[i] = nums2[p2--];
+    else nums1[i] = nums1[p1--];
+  }
+}
