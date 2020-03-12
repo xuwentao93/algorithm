@@ -56,3 +56,26 @@ var canThreePartsEqualSum = function(A) {
 }
 
 // 3. 计算数组中和为 sum / 3 的个数, 如果大于 3 那么也能得出结果. 时间复杂度为: O(n). 空间复杂度为: O(1).
+
+// 3-12 second time.
+
+var canThreePartsEqualSum = function(A) {
+  if (A.length <= 2) return false;
+  let sum = 0;
+  for (let i = 0; i < A.length; i++) sum += A[i];
+  if (sum % 3 !== 0) return false;
+  let pLeft = 0, pRight = A.length - 1;
+  let sumLeft = A[0], sumRight = A[pRight];
+  while (pLeft + 1 < pRight) {
+    if (sumLeft === sum / 3 && sumRight === sum / 3) return true;
+    if (sumLeft !== sum / 3) {
+      pLeft++;
+      sumLeft += A[pLeft];
+    }
+    if (sumRight !== sum / 3) {
+      pRight--;
+      sumRight += A[pRight];
+    }
+  }
+  return false;
+}
