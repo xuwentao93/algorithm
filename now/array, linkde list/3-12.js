@@ -26,3 +26,22 @@ var gcdOfStrings = function(str1, str2) {
   }
   return '';
 };
+
+// 3-13
+
+var gcdOfStrings = function(str1, str2) {
+  if (str1 === '' || str2 === '' || str1 === str2) return str1;
+  if (str2.length > str1.length) [str1, str2] = [str2, str1];
+  let str = str2;
+  while (str.length > 0) {
+    let sum = '';
+    for (let i = 0; i < str1.length; i++) {
+      sum += str;
+      if (sum === str1) return sum;
+    }
+    do {
+      str = str.slice(0, -1);
+    } while (str2.length % str.length !== 0 && str.length > 0);
+  }
+  return '';
+}
