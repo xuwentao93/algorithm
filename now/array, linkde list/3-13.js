@@ -18,3 +18,14 @@ console.log(majorityElement([3, 2, 3]));
 
 // 2. 排序. 因为出现的多数元素一定大于数组长度的一半, 所以排序后找最中间的那个数即可. 时间复杂度为排序的复杂度, 即
 // O(nlogn), 空间复杂度为: O(1), 没有开辟任何新的空间.
+
+// 3 - 14.
+
+var majorityElement = function(nums) {
+  const map = new Map();
+  for (let i = 0; i < nums.length; i++) {
+    if (map.get(nums[i]) === undefined) map.set(nums[i], 1);
+    else map.set(nums[i], map.get(nums[i]) + 1);
+    if (map.get(nums[i]) > nums.length >> 1) return nums[i];
+  }
+}
