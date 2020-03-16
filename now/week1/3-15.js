@@ -76,13 +76,25 @@ var trap = function(height) {
   return sum;
 }
 
-// 给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
-// 输入: ["eat", "tea", "tan", "ate", "nat", "bat"],
-// 输出:
-// [
-//   ["ate","eat","tea"],
-//   ["nat","tan"],
-//   ["bat"]
-// ] (l - 49)
+// 3-16.
 
-// 1. 
+var trap = function(height) {
+  if (height.length <= 2) return 0;
+  let maxHeight = 0;
+  let maxIndex = 0;
+  let sum = 0;
+  height.forEach((num, index) => {
+    if (num > maxHeight) {
+      maxHeight = num;
+      maxIndex = index;
+    }
+  });
+  let leftHeight = height[0], rightHeight = height[height.length - 1];
+  for (let i = 1; i < maxIndex; i++) {
+    leftHeight - height[i] > 0 ? sum += leftHeight - height[i] : leftHeight = height[i];
+  }
+  for (let i = height.length - 1; i > maxIndex; i--) {
+    rightHeight - height[i] > 0 ? sum += rightHeight - height[i] : rightHeight = height[i];
+  }
+  return sum;
+}

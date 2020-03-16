@@ -26,7 +26,9 @@ var lengthOfLIS = function(nums) {
 
 // console.log(lengthOfLIS([10,9,2,5,3,7,11]));
 
-// 2. 贪心算法 + 二分法.
+// 2. 贪心算法 + 二分法. 贪心的思想在于让数字最小, 对后面的数的升序最大值有利. 维护一个数组, 从小到大排列,
+// 对于进入的数字, 超过数组中的最大值就在末尾添加, 否则替换掉相应位置的数字(二分法). 最后这个数组的长度
+// 即为深度. (理解起来有点困难, 第一次接触这种思维, 描述可能有所欠缺.)
 
 var lengthOfLIS = function(nums) {
   let maxDeep = 0;
@@ -39,8 +41,9 @@ var lengthOfLIS = function(nums) {
       if (num > deep[mid]) start = mid + 1;
       else end = mid;
     }
-    deep[start] = num;
-    if (end === maxDeep) maxDeep++;
+    deep[start] = num; // 无论怎么移动, start 都是最后改的位置, 多多思考.
+    if (end === maxDeep) maxDeep++; // end 和初始一样, 说明 end 一直没有移动过, 进来的数太大了, 超过了数组
+    // 里面所有的值, 所以这个时候是添加, maxDeep 加 1.
   });
   return maxDeep;
 }
@@ -64,3 +67,39 @@ var lengthOfLIS = function(nums) {
 var repeatedSubstringPattern = function(s) {
   return (s + s).slice(1, -1).indexOf(s) !== -1;
 };
+
+// 3-16 补3-15.
+
+// 1. dynamic program.
+var lengthOfLIS = function(nums) {
+  if (nums.length === 0) return 0;
+  let deep = Array(nums.length).fill(1);
+  let maxDeep = 1;
+  nums.forEach((num, index) => {
+    for (let i = index + 1; i < nums.length; i++) {
+      if (nums[i] > num) deep[i] = Math.max(deep[i], deep[index] + 1);
+    }
+    maxDeep = Math.max(maxDeep, deep[i]);
+  })
+  return maxDeep;
+}
+
+// 2. binary search + greedy.
+
+var lengthOfLIS = function(nums) {
+  if (nums.length === 0) return 0;
+  const deep = Array(nums.length).fill(-Infinity);
+  const maxDeep = 0;
+  nums.forEach((num, index) => {
+    let start = 0;
+    let end = maxDeep;
+    while (start < end) {
+      let middle = Math.floor((start + end) >> 1);
+      if (num > deep[middle]) start = middle + 1;
+      else end = middle;
+    }
+    deep[start] = num;
+    if (end === maxDeep) maxDeep++;
+  })
+  return maxDeep;
+}
