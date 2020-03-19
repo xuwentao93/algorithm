@@ -24,3 +24,18 @@ var dailyTemperatures = function(T) {
   }
   return result;
 };
+
+// 3-19.
+
+var dailyTemperatures = function(T) {
+  const stack = [[T[0], 0]];
+  const result = Array(T.length).fill(0);
+  for (let i = 1; i < T.length; i++) {
+    while (stack.length !== 0 && T[i] > stack[stack.length - 1][0]) {
+      result[stack[stack.length - 1][1]] = i - stack[stack.length - 1][1];
+      stack.pop();
+    }
+    stack.push([T[i], i]);
+  }
+  return result;
+}
