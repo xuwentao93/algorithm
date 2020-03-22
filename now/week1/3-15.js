@@ -59,18 +59,15 @@ console.log(trap([0,1,0,2,1,0,1,3,2,1,2,1]));
 // 3. 双指针. 和解法 1 类似, 实际只需要找到左右高度小的哪一个, 而并不需要找到整题高度的最小值.
 // 时间复杂度为: O(n). 比解法 1 少了找最大值的地方. 空间复杂度为: O(1).
 
-var trap = function(height) {
-  if (height.length <= 2) return 0;
-  let sum = 0;
+function trap(height) {
   let left = 0, right = height.length - 1;
-  let leftMax = height[0], rightMax = height[height.length - 1];
+  let leftMax = height[left], rightMax = height[right];
+  let sum = 0;
   while (left < right) {
-    if (height[left] < height[right]) {
-      height[left] < leftMax ? sum += (leftMax - height[left]) : leftMax = height[left];
-      left++;
+    if (height[left] > height[right]) {
+      height[right] < rightMax ? sum += rightMax - height[right--] : rightMax = height[right--];
     } else {
-      height[right] < rightMax ? sum += (rightMax - height[right]) : rightMax = height[right];
-      right--;
+      height[left] < leftMax ? sum+= leftMax - height[left++] : leftMax = height[left++];
     }
   }
   return sum;
@@ -95,6 +92,22 @@ var trap = function(height) {
   }
   for (let i = height.length - 1; i > maxIndex; i--) {
     rightHeight - height[i] > 0 ? sum += rightHeight - height[i] : rightHeight = height[i];
+  }
+  return sum;
+}
+
+// 3-22.
+
+function trap(height) {
+  let left = 0, right = height.length - 1;
+  let leftMax = height[left], rightMax = height[right];
+  let sum = 0;
+  while (left < right) {
+    if (height[left] > height[right]) {
+      height[right] < rightMax ? sum += rightMax - height[right--] : rightMax = height[right--];
+    } else {
+      height[left] < leftMax ? sum+= leftMax - height[left++] : leftMax = height[left++];
+    }
   }
   return sum;
 }

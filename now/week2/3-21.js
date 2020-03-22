@@ -3,7 +3,7 @@
 // 你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i+1 个加油站需要消耗汽油 cost[i] 升。
 // 你从其中的一个加油站出发，开始时油箱为空。
 // 如果你可以绕环路行驶一周，则返回出发时加油站的编号，否则返回 -1。
-// 说明: 如果题目有解，该答案即为唯一答案。
+// 说明: 如果题目有解，该答案即为唯一答案。(l-134)
 
 
 // 1. 暴力法. 从每个加油站一次往前推, 汽油不够的时候就不符合, 对于数组的每个数字, 都要遍历一次数组才能知道是否
@@ -76,3 +76,28 @@ var removeElement = function(nums, val) {
   })
   return point;
 };
+
+// 3-22
+
+var canCompleteCircuit = function(gas, cost) {
+  let start = gas.length - 1;
+  let end = 0;
+  let sum = result(start);
+  while (start > end) {
+    if (sum < 0) sum += result(--start);
+    else sum += result(end++);
+  }
+  return sum < 0 ? -1 : start;
+
+  function result(index) {
+    return gas[index] - cost[index];
+  }
+}
+
+var removeElement = function(nums, val) {
+  let point = 0;
+  nums.forEach((num) => {
+    if (num != val) nums[point++] = num;
+  })
+  return point;
+}
