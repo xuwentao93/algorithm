@@ -10,27 +10,27 @@
 // 只需要循环遍历一次字符串, 时间复杂度为: O(n). 开辟了一个栈用来储存字符串, 空间复杂度为: O(n).
 // 最坏的情况下时间复杂度为O(n²), 即全为字符串最后来个 '..'.
 
-var simplifyPath = function(path) {
-  const stack = [path[0]];
-  for (let i = 1; i < path.length; i++) {
-    if (path[i] === '/') {
-      if (stack[stack.length - 1] === '/') continue; // 两个 '/' 就不做 push 操作.
-      if (stack[stack.length - 1] === '.') stack.pop(); // 碰见 '.' 说明形成 './' 就弹出.
-      else stack.push(path[i]);
-    } else if (path[i] === '.') {
-      if (path[i + 1] === '.' && path[i + 2] === '.') {
-        while (path[i] === '.') {
-          stack.push('.');
-          i++;
-        }
-      } else if (stack[stack.length - 1] === '.') {
-        stack.pop(); // 碰见两个 '.' 就弹出.
-        while (stack[stack.length - 1] !== '/') stack.pop();
-      } else stack.push(path[i]);
-    } else stack.push(path[i]);
-  }
-  let final = '';
-  stack.forEach((char) => final += char);
-  while (final.length !== 1 && final[final.length - 1] === '/') return final.slice(0, -1); // 最后一个是 '/' 就移除.
-  return final;
-};
+// var simplifyPath = function(path) { (代码有误)
+//   const stack = [path[0]];
+//   for (let i = 1; i < path.length; i++) {
+//     if (path[i] === '/') {
+//       if (stack[stack.length - 1] === '/') continue; // 两个 '/' 就不做 push 操作.
+//       if (stack[stack.length - 1] === '.') stack.pop(); // 碰见 '.' 说明形成 './' 就弹出.
+//       else stack.push(path[i]);
+//     } else if (path[i] === '.') {
+//       if (path[i + 1] === '.' && path[i + 2] === '.') {
+//         while (path[i] === '.') {
+//           stack.push('.');
+//           i++;
+//         }
+//       } else if (stack[stack.length - 1] === '.') {
+//         stack.pop(); // 碰见两个 '.' 就弹出.
+//         while (stack[stack.length - 1] !== '/') stack.pop();
+//       } else stack.push(path[i]);
+//     } else stack.push(path[i]);
+//   }
+//   let final = '';
+//   stack.forEach((char) => final += char);
+//   while (final.length !== 1 && final[final.length - 1] === '/') return final.slice(0, -1); // 最后一个是 '/' 就移除.
+//   return final;
+// };
