@@ -1,26 +1,26 @@
-// 树的前序遍历. 
-//输入: [1,null,2,3]  
-// 1
-// \
-//  2
-// /
-// 3 
-// 输出: [1,2,3] (l-144)
+树的前序遍历. 
+输入: [1,null,2,3]  
+1
+\
+ 2
+/
+3 
+输出: [1,2,3] (l-144)
 
-// 1. 递归. 时间复杂度为: O(n). 空间复杂度为: O(n).
+1. 递归. 时间复杂度为: O(n). 空间复杂度为: O(n).
 
-// var preorderTraversal = function(root) {
-//   const result = [];
-//   traversalTree(root);
-//   return result;
+var preorderTraversal = function(root) {
+  const result = [];
+  traversalTree(root);
+  return result;
 
-//   function traversalTree(tree) {
-//     if (tree === null) return;
-//     result.push(tree.val);
-//     traversalTree(tree.left);
-//     traversalTree(tree.right);
-//   }
-// };
+  function traversalTree(tree) {
+    if (tree === null) return;
+    result.push(tree.val);
+    traversalTree(tree.left);
+    traversalTree(tree.right);
+  }
+};
 
 // 树的中序遍历. 时间复杂度为: O(n). 空间复杂度为: O(n). // (l-94)
 
