@@ -104,3 +104,27 @@ var levelOrder = function(root) {
   }
   return ans;
 };
+
+// l - 112
+
+var hasPathSum = function(root, sum) {
+  if (root === null) return [];
+  let ans = false;
+  recursion(root, []);
+  return ans;
+  function recursion(tree, temp) {
+    if (tree === null || ans === true) return null;
+    if (tree.left === null && tree.right === null) {
+      temp.push(tree.val);
+      const num = 0;
+      temp.forEach(item => num += item);
+      if (num === sum) ans = true;
+      return;
+    }
+    temp.push(tree.val);
+    let left = recursion(tree, temp);
+    if (left !== null) temp.pop();
+    let right = recursion(tree.right, temp);
+    if (right !== null) temp.pop();
+  }
+};
