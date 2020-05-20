@@ -13,8 +13,23 @@ var reversePairs = function(nums) {
   return ans;
 };
 
-// 2.
+// 2. 归并排序.
 
 var reversePairs = function(nums) {
+  if (nums.length < 2) return 0;
+  let mid = ~~ nums.length >> 1;
+  const left = nums.slice(0, mid);
+  const right = nums.slice(mid);
+  return merge(reversePairs(left), reversePairs(right));
   
+  function merge(left, right) {
+    const result = [];
+    while(left.length && right.length) {
+      if (left[0] < right[0]) result.push(left.shift());
+      else result.push(right.shift());
+    }
+    if (left.length !== 0) result.push(...left);
+    if (right.length !== 0) result.push(...right);
+    return result;
+  }
 }
