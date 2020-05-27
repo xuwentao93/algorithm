@@ -35,3 +35,30 @@ var reverse = function(x) {
   }
   return result;
 }
+
+
+// 给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。 (l - 19)
+
+// 1. 迭代. 开辟储存空间都数组.
+
+var removeNthFromEnd = function(head, n) {
+  const ans = head;
+  const list = [ans];
+  while (head.next) {
+    list.push(head.next);
+    head = head.next;
+  }
+  if (list.length === 1) {
+    return null;
+  }
+  if (list.length === 2) {
+    if (n === 1) {
+      ans.next = null;
+      return ans;
+    }
+    else return list[1];
+  }
+  if (list.length === n) return list[1];
+  list[list.length - n - 1].next = list[list.length - n + 1];
+  return ans;
+};
