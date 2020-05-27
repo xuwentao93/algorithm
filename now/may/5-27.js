@@ -62,3 +62,6 @@ var removeNthFromEnd = function(head, n) {
   list[list.length - n - 1].next = list[list.length - n + 1];
   return ans;
 };
+
+// 3. 使用双指针(快慢指针), 第一个指针先移动 n + 1 步, 然后两个指针同时移动, 等第一个指针指向 null,
+// 说明第二个指针的位置是要删除的位置.
