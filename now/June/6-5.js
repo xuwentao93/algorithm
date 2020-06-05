@@ -105,3 +105,15 @@ var merge = function(nums1, m, nums2, n) {
     else nums1[i] = nums2[p2--];
   }
 };
+
+// l - 1013.
+var canThreePartsEqualSum = function(A) {
+  let sum = 0;
+  A.forEach(item => {
+    sum += item;
+  });
+  if (sum % 3 !== 0) return false;
+  let left = 0, right = A.length - 1;
+  let sumLetft = 0; sumRight = 0;
+
+};
