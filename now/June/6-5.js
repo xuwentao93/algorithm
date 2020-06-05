@@ -69,3 +69,31 @@ var canCompleteCircuit = function(gas, cost) {
     return gas[index] - cost[index];
   }
 }
+
+
+
+// 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。(l - 3)
+
+// 1. hashmap. 时间复杂度为: O(n). 空间复杂度为: O(k). 其中 k 为结果返回的字符串长度.
+var lengthOfLongestSubstring = function(s) {
+  const map = new Map();
+  let ans = 0;
+  let str = '';
+  for (let i = 0; i < s.length; i++) {
+    if (map.get(s[i]) === undefined) {
+      str += s[i];
+      map.set(s[i], i); // 存 i 用于字符串好截.
+    } else {
+      if (str.length > ans) ans = str.length;
+      let currentStr = str;
+      str = str.slice(map.get(s[i]) - i + str.length + 1) + s[i];
+      for (let j = i - currentStr.length; j < map.get(s[i]); j++) {
+        map.set(s[j], undefined);
+      }
+      map.set(s[i], i);
+    }
+  }
+  return Math.max(str.length, ans);
+};
+
+console.log(lengthOfLongestSubstring("dvdf"));
