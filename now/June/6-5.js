@@ -53,4 +53,19 @@ var minSwapsCouples = function(row) {
   return ans;
 }
 
-console.log(minSwapsCouples([0,2,4,6,8,1,3,5,7,9]));
+// l - 134.
+
+var canCompleteCircuit = function(gas, cost) {
+  let start = gas.length - 1;
+  let end = 0;
+  let sum = result(start);
+  while (start > end) {
+    if (sum >= 0) sum += result(end++);
+    else sum += result(--start);
+  }
+  return sum < 0 ? -1 : start;
+
+  function result(index) {
+    return gas[index] - cost[index];
+  }
+}
