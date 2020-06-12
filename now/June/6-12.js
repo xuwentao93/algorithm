@@ -50,3 +50,45 @@ var lengthOfLIS = function(nums) {
 }
 
 lengthOfLIS([3,5,6,2,5,4,19,5,6,7,12]);
+
+// l - 14
+var longestCommonPrefix = function(strs) {
+  if (strs.length === 0) return '';
+  let ans = '';
+  for (let i = 0; i < strs[0].length; i++) {
+    for (let j = 0; j < strs.length; j++) {
+      if (strs[j][i] !== strs[0][i]) return ans;
+    }
+    ans += strs[0][i];
+  }
+  return ans;
+};
+
+
+// l - 17.
+
+var letterCombinations = function(digits) {
+  if (digits.length === 0) return [];
+  const ans = [];
+  const map = new Map();
+  map.set('2', 'abc');
+  map.set('3', 'def');
+  map.set('4', 'ghi');
+  map.set('5', 'jkl');
+  map.set('6', 'mno');
+  map.set('7', 'pqrs');
+  map.set('8', 'tuv');
+  map.set('9', 'wxyz');
+  trackback('', 0);
+  return ans;
+  function trackback(str, digit) {
+    if (digit === digits.length) {
+      ans.push(str);
+      return;
+    }
+    let s = map.get(digits[digit]);
+    for (let i = 0; i < s; i++) {
+      trackback(str + s[i], digit + 1);
+    }
+  }
+}
