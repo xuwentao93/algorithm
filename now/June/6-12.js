@@ -64,7 +64,6 @@ var longestCommonPrefix = function(strs) {
   return ans;
 };
 
-
 // l - 17.
 
 var letterCombinations = function(digits) {
@@ -90,5 +89,21 @@ var letterCombinations = function(digits) {
     for (let i = 0; i < s; i++) {
       trackback(str + s[i], digit + 1);
     }
+  }
+}
+
+// l - 22
+
+var generateParenthesis = function(n) {
+  const ans = [];
+  trackback('', 0, 0);
+  return ans;
+  function trackback(str, left, right) {
+    if (str.length === n * 2) {
+      ans.push(str);
+      return;
+    }
+    if (left < n) trackback(str + '(', left + 1, right);
+    if (right < left) trackback(str + ')', left, right + 1);
   }
 }
