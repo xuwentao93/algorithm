@@ -116,3 +116,14 @@ var levelOrder = function(root) {
   }
   return ans;
 }
+
+// l - 198
+var rob = function(nums) {
+  if (nums.length === 0) return 0;
+  if (nums.length === 1) return nums[0];
+  let prev = nums[0], cur = Math.max(nums[0], nums[1]);
+  for (let i = 2; i < nums.length; i++) {
+    [prev, cur] = [cur, Math.max(prev + nums[i], cur)];
+  }
+  return cur;
+};
