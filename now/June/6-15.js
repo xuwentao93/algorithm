@@ -127,3 +127,58 @@ var rob = function(nums) {
   }
   return cur;
 };
+
+// l - 120.
+// 1. 自顶向下的动态规划.
+var minimumTotal = function(triangle) {
+  // if (triangle.length === 1) return triangle[0][0];
+  for (let i = 1; i < triangle.length; i++) {
+    for (let j = 0; j < triangle[i].length; j++) {
+      if (j === 0) triangle[i][j] += triangle[i - 1][j];
+      else if (j === triangle[i].length - 1) triangle[i][j] += triangle[i - 1][j - 1];
+      else triangle[i][j] += Math.min(triangle[i - 1][j - 1], triangle[i - 1][j]);
+    }
+  }
+  let min = Infinity;
+  for (let i = 0; i < triangle[triangle.length - 1].length; i++) {
+    min = Math.min(triangle[triangle.length - 1][i], min);
+  }
+  return min;
+};
+
+
+// 如果连续数字之间的差严格地在正数和负数之间交替，则数字序列称为摆动序列。第一个差（如果存在的话）可能是正数或负数。
+// 少于两个元素的序列也是摆动序列。例如， [1,7,4,9,2,5] 是一个摆动序列，因为差值 (6,-3,5,-7,3) 是正负交替出现的。
+// 相反, [1,4,7,2,5] 和 [1,7,4,5,5] 不是摆动序列，第一个序列是因为它的前两个差值都是正数，第二个序列是因为它的最后一个差值为零。
+// 给定一个整数序列，返回作为摆动序列的最长子序列的长度。 通过从原始序列中删除一些（也可以不删除）元素来获得子序列，
+// 剩下的元素保持其原始顺序。(l - 376)
+
+// 1. 动态规划. 我们维护一个 dp 数组, 他的每项都为一个包含 add 和 reduce 的属性的对象, 来记录到当前项时
+// 正负摆动的最大值, 最后, dp 中的最大项即为所求. 时间复杂度为: O(n²), 对于数组中的每一项, 都要往前遍历每个数字.
+// 空间复杂度为: O(n), 我们开辟了一个 dp 的数组来维护.
+var wiggleMaxLength = function(nums) {
+  if (nums.length === 0) return 0;
+  const dp = [];
+  for (let i = 0; i < nums.length; i++) {
+    dp.push({
+      add: 1,
+      reduce: 1
+    });
+  }
+  for (let i = 1; i < nums.length; i++) {
+    for (let j = 0; j < i; j++) {
+      if (nums[i] > nums[j]) {
+        dp[i].add = Math.max(dp[i].add, dp[j].reduce + 1);
+      } else if (nums[i] < nums[j]) {
+        dp[i].reduce = Math.max(dp[i].reduce, dp[j].add + 1);
+      }
+    }
+  }
+  let max = 1;
+  for (let i = 0; i < dp.length; i++) {
+    max = Math.max(max, Math.max(dp[i].add, dp[i].reduce));
+  }
+  return max;
+};
+
+wiggleMaxLength([1,7,4,9,2,5]);
