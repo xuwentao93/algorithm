@@ -24,3 +24,18 @@ var isBalanced = function(root) {
     return Math.abs(left - right) < 2 ? Math.max(left, right) + 1 : -1;
   } 
 }
+
+// l - 1038.
+
+var bstToGst = function(root) {
+  let max = 0;
+  bfs(root);
+  return root;
+  function bfs(tree) {
+    if (tree === null) return;
+    bfs(tree.right);
+    tree.val += max;
+    max = tree.val;
+    bfs(tree.left);
+  }
+};
