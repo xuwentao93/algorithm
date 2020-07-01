@@ -130,3 +130,33 @@ var wiggleMaxLength = function(nums) {
   }
   return Math.max(up, down);
 }
+
+var maximalSquare = function(matrix) {
+  if (matrix.length === 0) return 0;
+  const dp = [];
+  let max = 0;
+  for (let i = 0; i < matrix.length; i++) {
+    if (matrix[i][0] === '1') {
+      dp.push([1]);
+      max = 1;
+    }
+    else dp.push([0]);
+  }
+  for (let i = 1; i < matrix[0].length; i++) {
+    if (matrix[0][i] === '1') {
+      dp[0].push(1);
+      max = 1;
+    }
+    else dp[0].push(0);
+  }
+  for (let i = 1; i < matrix.length; i++) {
+    for (let j = 1; j < matrix[i].length; j++) {
+      if (matrix[i][j] === '0') dp[i][j] = 0;
+      else {
+        dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
+        max = Math.max(dp[i][j], max);
+      }
+    }
+  }
+  return max * max;
+};
