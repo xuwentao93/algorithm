@@ -1,8 +1,8 @@
 class Queue {
   constructor(data) {
     this.length = 0;
-    this.first = null;
     this.last = { next: null, item: null };
+    this.first = { next: null, item: null };
     if (data) this.enqueue(data);
   }
 
@@ -11,7 +11,7 @@ class Queue {
   }
 
   isEmpty() {
-    return this.first === null || this.first.next === null;
+    return this.length === 0;
   }
 
   peek() {
@@ -20,15 +20,10 @@ class Queue {
   }
 
   enqueue(item) {
-    if (this.isEmpty()) this.first = {
-      next: this.last,
-      item
-    };
-    else {
-      this.last.item = item;
-      this.last.next = { item: null, next: null };
-      this.last = this.last.next;
-    }
+    this.last.item = item;
+    this.last.next = { item: null, next: null };
+    if (this.isEmpty()) this.first = this.last;
+    this.last = this.last.next;
     this.length++;
   }
 
@@ -40,3 +35,19 @@ class Queue {
     return item;
   }
 }
+
+// const queue = new Queue();
+
+// queue.enqueue(1);
+// console.log(Object.assign({}, queue));
+// queue.enqueue(2);
+// queue.enqueue(3);
+// queue.enqueue(4);
+// queue.enqueue(5);
+// for (let i = 0; i < 5; i++) {
+//   queue.dequeue();
+// }
+// for (let i = 0; i < 5; i++) {
+//   queue.enqueue(i);
+// }
+// console.log(Object.assign({}, queue));
