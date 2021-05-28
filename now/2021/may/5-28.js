@@ -12,3 +12,19 @@ var rob = function(nums) {
   }
   return cur;
 };
+
+// 树的前序遍历.
+
+
+var postorderTraversal = function(root) {
+  if (!root) return [];
+  const result = [];
+  recursion(root);
+  return result;
+
+  function recursion(tree) {
+    if (tree.left) recursion(tree.left);
+    if (tree.right) recursion(tree.right);
+    result.push(tree.val);
+  }
+}
