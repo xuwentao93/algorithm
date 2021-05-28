@@ -54,5 +54,3 @@ var addStrings = function(num1, num2) {
   }
   return ans.reverse().join('');
 }
-
-addStrings('99', '99999');
